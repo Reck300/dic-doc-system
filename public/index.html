@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DIC/DOC Upload</title>
+</head>
+<body>
+
+<h2>Envio de Documentos</h2>
+
+<input id="cpf" placeholder="Digite seu CPF"><br><br>
+<input type="file" id="file"><br><br>
+
+<button onclick="upload()">Enviar</button>
+
+<div id="status"></div>
+
+<script>
+function upload() {
+  const file = document.getElementById("file").files[0];
+  const cpf = document.getElementById("cpf").value;
+
+  if (!file) {
+    alert("Selecione um arquivo");
+    return;
+  }
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("cpf", cpf);
+
+  fetch("/upload", {
+    method: "POST",
+    body: form
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("status").innerText =
+      JSON.stringify(data);
+  })
+  .catch(() => {
+    document.getElementById("status").innerText = "Erro no envio";
+  });
+}
+</script>
+
+</body>
+</html>
